@@ -125,11 +125,11 @@ public class BlackJack {
             playerMoney -= betAmount; 
 
             StartRound(dealer, player, playDeck);
-            if(player.HasBlackJack()){
-                dealerTurn = true;
-            }else{
-
-                while(ended == false){
+            while(ended == false){
+                if(player.HasBlackJack()){
+                    dealerTurn = true;
+                    ended = true;
+                }else{
                     clearScreen();
                     System.out.println("Money: $"+playerMoney+ " Bet amount: $"+betAmount);
                     print_hands(dealer, player);
