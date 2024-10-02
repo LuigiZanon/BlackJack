@@ -88,7 +88,7 @@ public class BlackJack {
 
     public static void wait_time(int time){
         try {
-            Thread.sleep(time); // Pausa por 2000 milissegundos (2 segundos)
+            Thread.sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -104,7 +104,6 @@ public class BlackJack {
         int betAmount = 0;
         boolean dealerTurn = false;
         boolean doubled = false;
-        boolean ended = false;
         int op =0;
         
         System.out.println(AnsiColors.WHITE_BACKGROUND + AnsiColors.BLACK + "-----Welcome to BlackJack!-----"+ AnsiColors.RESET);
@@ -117,7 +116,6 @@ public class BlackJack {
                     playerMoney = input.nextInt();
             }
 
-            ended = false;
             dealerTurn = false;
             doubled = false;
 
@@ -125,10 +123,11 @@ public class BlackJack {
             playerMoney -= betAmount; 
 
             StartRound(dealer, player, playDeck);
-            while(ended == false){
+
+            while(dealerTurn == false){
                 if(player.HasBlackJack()){
                     dealerTurn = true;
-                    ended = true;
+
                 }else{
                     clearScreen();
                     System.out.println("Money: $"+playerMoney+ " Bet amount: $"+betAmount);
@@ -143,7 +142,6 @@ public class BlackJack {
                                 betAmount = betAmount*2;
                                 doubled = true;
                                 dealerTurn = true;
-                                ended = true;
                             }else{
                                 System.out.println(AnsiColors.RED + "You don't have enough money!"+ AnsiColors.RESET);
                                 wait_time(1500);
@@ -152,7 +150,6 @@ public class BlackJack {
                         case 2 -> dealCard(playDeck, player);
                         
                         case 3 -> {
-                            ended = true;
                             dealerTurn = true;
                         }
                         
@@ -163,7 +160,6 @@ public class BlackJack {
 
                     if(player.above() == true){
                         System.out.println(AnsiColors.RED_BOLD + "You busted!"+ AnsiColors.RESET);
-                        ended = true;
                         dealerTurn = true;
                     }
                 }
@@ -176,51 +172,53 @@ public class BlackJack {
             }
             clearScreen();
             switch (win(dealer, player)) {
-                case 0:
+                case 0 -> {
                     System.out.println(AnsiColors.GREEN + "\r\n" + //
-                                                " __     __                               _ \r\n" + //
-                                                " \\ \\   / /                              | |\r\n" + //
-                                                "  \\ \\_/ /__  _   _  __      _____  _ __ | |\r\n" + //
-                                                "   \\   / _ \\| | | | \\ \\ /\\ / / _ \\| '_ \\| |\r\n" + //
-                                                "    | | (_) | |_| |  \\ V  V / (_) | | | |_|\r\n" + //
-                                                "    |_|\\___/ \\__,_|   \\_/\\_/ \\___/|_| |_(_)\r\n" + //
-                                                "                                           \r\n" + //
-                                                "                                           \r\n" + //
-                                                ""+ AnsiColors.RESET);
+                            " __     __                               _ \r\n" + //
+                            " \\ \\   / /                              | |\r\n" + //
+                            "  \\ \\_/ /__  _   _  __      _____  _ __ | |\r\n" + //
+                            "   \\   / _ \\| | | | \\ \\ /\\ / / _ \\| '_ \\| |\r\n" + //
+                            "    | | (_) | |_| |  \\ V  V / (_) | | | |_|\r\n" + //
+                            "    |_|\\___/ \\__,_|   \\_/\\_/ \\___/|_| |_(_)\r\n" + //
+                            "                                           \r\n" + //
+                            "                                           \r\n" + //
+                            ""+ AnsiColors.RESET);
                     playerMoney += (betAmount*2);
-                    break;
-                case 1:
-                    System.out.println(AnsiColors.YELLOW_BOLD_BRIGHT + "\r\n" + //
-                                                "  _______ _____ ______ _ \r\n" + //
-                                                " |__   __|_   _|  ____| |\r\n" + //
-                                                "    | |    | | | |__  | |\r\n" + //
-                                                "    | |    | | |  __| | |\r\n" + //
-                                                "    | |   _| |_| |____|_|\r\n" + //
-                                                "    |_|  |_____|______(_)\r\n" + //
-                                                "                         \r\n" + //
-                                                "                         \r\n" + //
-                                                ""+ AnsiColors.RESET);
-                    playerMoney += betAmount;
-                    break;
+                }
 
-                case 2:
+                case 1 -> {
+                    System.out.println(AnsiColors.YELLOW_BOLD_BRIGHT + "\r\n" + //
+                            "  _______ _____ ______ _ \r\n" + //
+                            " |__   __|_   _|  ____| |\r\n" + //
+                            "    | |    | | | |__  | |\r\n" + //
+                            "    | |    | | |  __| | |\r\n" + //
+                            "    | |   _| |_| |____|_|\r\n" + //
+                            "    |_|  |_____|______(_)\r\n" + //
+                            "                         \r\n" + //
+                            "                         \r\n" + //
+                            ""+ AnsiColors.RESET);
+                    playerMoney += betAmount;
+                }
+
+                case 2 -> {
                     System.out.println(AnsiColors.RED_BOLD_BRIGHT +"\r\n" + //
-                                                "  _____             _                      _           _ \r\n" + //
-                                                " |  __ \\           | |                    (_)         | |\r\n" + //
-                                                " | |  | | ___  __ _| | ___ _ __  __      ___ _ __  ___| |\r\n" + //
-                                                " | |  | |/ _ \\/ _` | |/ _ \\ '__| \\ \\ /\\ / / | '_ \\/ __| |\r\n" + //
-                                                " | |__| |  __/ (_| | |  __/ |     \\ V  V /| | | | \\__ \\_|\r\n" + //
-                                                " |_____/ \\___|\\__,_|_|\\___|_|      \\_/\\_/ |_|_| |_|___(_)\r\n" + //
-                                                "                                                         \r\n" + //
-                                                "                                                         \r\n" + //
-                                                ""+ AnsiColors.RESET);
+                            "  _____             _                      _           _ \r\n" + //
+                            " |  __ \\           | |                    (_)         | |\r\n" + //
+                            " | |  | | ___  __ _| | ___ _ __  __      ___ _ __  ___| |\r\n" + //
+                            " | |  | |/ _ \\/ _` | |/ _ \\ '__| \\ \\ /\\ / / | '_ \\/ __| |\r\n" + //
+                            " | |__| |  __/ (_| | |  __/ |     \\ V  V /| | | | \\__ \\_|\r\n" + //
+                            " |_____/ \\___|\\__,_|_|\\___|_|      \\_/\\_/ |_|_| |_|___(_)\r\n" + //
+                            "                                                         \r\n" + //
+                            "                                                         \r\n" + //
+                            ""+ AnsiColors.RESET);
                     if(doubled == true){
                         playerMoney += (betAmount/2);
                     }
-                    break;
-                default:
-                    throw new AssertionError();
                 }
+
+                default -> throw new AssertionError();
+                }
+
                 print_hands(dealer, player);
 
                 System.out.println("You have a total of $" + playerMoney);
@@ -237,6 +235,6 @@ public class BlackJack {
         } while (op != 4);
 
 
-        input.close(); // Add this line to close the Scanner resource
+        input.close();
     }
 }
