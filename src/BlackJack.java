@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class BlackJack {
@@ -58,14 +59,19 @@ public class BlackJack {
 
     public static int bet(int playerMoney){
         Scanner input = new Scanner(System.in);
-        int op;
+        int op =0;
         do { 
             System.out.println("How much you wanna bet?");
-            op = input.nextInt();
+            try {
+                op = input.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println(AnsiColors.RED_BACKGROUND + "Please insert an integer."+ AnsiColors.RESET);
+                input.next(); // Limpa a entrada inválida
+            }
             if (op > playerMoney) {
                 System.out.println("You don't have enough money");
             }
-        } while (op > playerMoney);
+        } while (op > playerMoney || op == 0);
 
         return op;
     }
@@ -111,9 +117,14 @@ public class BlackJack {
 
         do {
             
-            if(playerMoney == 0){
+            while(playerMoney == 0){
                 System.out.println("How much money do you have?");
+                try {
                     playerMoney = input.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println(AnsiColors.RED_BACKGROUND + "Please insert an integer."+ AnsiColors.RESET);
+                    input.next(); // Limpa a entrada inválida
+                }
             }
 
             dealerTurn = false;
@@ -133,7 +144,16 @@ public class BlackJack {
                     System.out.println("Money: $"+playerMoney+ " Bet amount: $"+betAmount);
                     print_hands(dealer, player);
                     roundMenu();
-                    op = input.nextInt();
+
+                    while (op < 1 || op > 4) { 
+                        try {
+                            op = input.nextInt();
+                        } catch (InputMismatchException e) {
+                            System.out.println(AnsiColors.RED_BACKGROUND + "Please insert an integer."+ AnsiColors.RESET);
+                            input.next(); // Limpa a entrada inválida
+                        }
+                    }
+
                     switch(op){
                         case 1 -> {
                             if(playerMoney >= betAmount){
@@ -166,7 +186,7 @@ public class BlackJack {
             }
 
             if(dealerTurn == true){
-                while(dealer.getHandValue() <= 17){
+                while(dealer.getHandValue() < 17){
                     dealer.addCard(playDeck.dealCard());
                 }
             }
@@ -223,7 +243,15 @@ public class BlackJack {
 
                 System.out.println("You have a total of $" + playerMoney);
                 System.out.println("Wanna play another round?\n[1]-yes\t[2]-no\n");
-                    op = input.nextInt();
+                
+                while (op < 0 || op > 2) { 
+                    try {
+                        op = input.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println(AnsiColors.RED_BACKGROUND + "Please insert an integer."+ AnsiColors.RESET);
+                        input.next(); // Limpa a entrada inválida
+                    }
+                }
 
                 if(op == 2){
                     break;
